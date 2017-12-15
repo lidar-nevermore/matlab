@@ -1,0 +1,33 @@
+% segment point cloud into several voxels
+
+points=rand(100,3);
+% voxel size
+length=0.2;
+width=0.2;
+height=0.2;
+
+figure
+hold on
+axis equal
+xlabel('X')
+ylabel('Y')
+zlabel('Z')
+scatter3(points(:,1),points(:,2),points(:,3),1,points(:,3)/max(points(:,3)),'.');% display point cloud
+x=xmin:width:(xmin+ceil((xmax-xmin)/width)*width); 
+y=ymin:length:(ymin+ceil((ymax-ymin)/length)*length); 
+z=zmin:height:(zmin+ceil((zmax-zmin)/heightstep)*height);
+[Z,X]=meshgrid(z,x); % X
+for i=y
+ Y=linspace(i,i,size(Z,1));
+    plot3(X,Y,Z,'r');
+end
+[X,Y]=meshgrid(x,y); % Y
+for i=z
+Z=linspace(i,i,size(X,1));
+plot3(X,Y,Z,'r')
+end
+[Y,Z]=meshgrid(y,z); % Z
+for i=x
+X=linspace(i,i,size(Y,1));
+plot3(X,Y,Z,'g')
+end
