@@ -9,7 +9,7 @@ parfor i=1:sz
     if (length(idx{i})>3)
         pts=data(idx{i},:);        
         [v,d]=eig(cov(pts));
-        if dot(pts(i,:),v(1:3))>0
+        if dot(pts(1,:),v(1:3))>0
           nor=v(1:3)*-1;
         else
           nor=v(1:3);
