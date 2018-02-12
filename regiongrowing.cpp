@@ -125,6 +125,7 @@ void applySmoothRegionGrowingAlgorithm (
 	point_residual.resize (num_of_pts, pair);
 	
 	for (int i_point = 0; i_point < num_of_pts; i_point++)
+
 	{			
 		point_residual[i_point].first = static_cast<float>(nor_data[3*m+i_point]);        
 		point_residual[i_point].second = i_point;
@@ -151,6 +152,7 @@ void applySmoothRegionGrowingAlgorithm (
 			if (point_labels_[index] == -1)
 			{
 				seed = index;
+				seed_counter = i_seed;
 				break;
 			}
 		}
