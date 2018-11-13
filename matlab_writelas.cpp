@@ -15,8 +15,7 @@ void mexFunction(int nlhs, mxArray *plhs[],
 {
     (void)nlhs; /* unused parameters */
     (void)plhs;
-    double *pointer;
-    char *filename;
+    double *pointer;    
     double start_time = 0.0,sum_x=0.0,sum_y=0.0,sum_z=0.0;
     int num_pts,index;
     LASwriteOpener laswriteopener;
@@ -27,9 +26,8 @@ void mexFunction(int nlhs, mxArray *plhs[],
     {
         mexErrMsgIdAndTxt("MATLAB:cppfeature:invalidNumInputs",
                 "Invalid input, required format: xyzirncuRGB!");
-    }
-    filename = mxArrayToString(prhs[1]);
-    laswriteopener.set_file_name(filename);
+    }    
+    laswriteopener.set_file_name(mxArrayToString(prhs[1]));
     start_time = taketime();
     if (!laswriteopener.active())
     {
