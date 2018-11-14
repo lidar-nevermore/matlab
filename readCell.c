@@ -45,8 +45,8 @@ static char* readline(FILE *input)
         if(fgets(line+len,max_line_len-len,input) == NULL)
             break;
     }
-    if (line[strlen(line)-1] == '\n')
-        line[strlen(line)-1] = '\0';
+    if (line[len-1] == '\n')
+        line[len-1] = '\0';
     return line;
 }
 
