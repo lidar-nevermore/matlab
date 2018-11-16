@@ -48,7 +48,7 @@ void readCell(const char *filename, int nlhs, const mxArray *plhs[])
     FILE *fp = fopen(filename, "r");
     int num_of_records, i, j;
     char *endptr, *val;
-    double *line_data, *temp_data, start_time, value;
+    double *line_data, start_time, value;
     mwSize max_num_line_elements, num_elements;
     mxArray *mxline_data, *cell_array_ptr;
 
@@ -100,16 +100,13 @@ void readCell(const char *filename, int nlhs, const mxArray *plhs[])
             line_data[num_elements] = value;
             num_elements++;
         }
-
-        mxline_data = mxCreateDoubleMatrix(1, num_elements, mxREAL);
-        temp_data = mxGetPr(mxline_data);
-        memcpy_s(temp_data, num_elements * sizeof(double), line_data, num_elements * sizeof(double));
+        mxline_data = mxCreateDoubleMatrix(1, num_elements, mxREAL);        
+        memcpy_s(mxGetPr(mxline_data), num_elements * sizeof(double), line_data, num_elements * sizeof(double));
         mxSetCell(cell_array_ptr, i, mxline_data);
     }
     plhs[0] = cell_array_ptr;
     val = NULL;
-    endptr = NULL;
-    temp_data = NULL;
+    endptr = NULL;    
     mxline_data = NULL;
     free(line);
     free(line_data);
