@@ -93,7 +93,7 @@ void readCell(const char *filename, int nlhs, const mxArray *plhs[])
             value = strtod(val, &endptr);
             if (endptr == val || errno != 0 || *endptr != '\0')
             {
-                mexPrintf("Wrong input format at line %d,%d \n", num_of_records + 1, num_elements + 1);
+                mexPrintf("Wrong input format at line %d,column %d\n", num_of_records + 1, num_elements + 1);
                 fake_answer(nlhs, plhs);
                 return;
             }
