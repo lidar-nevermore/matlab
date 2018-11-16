@@ -105,9 +105,6 @@ void readCell(const char *filename, int nlhs, const mxArray *plhs[])
         mxSetCell(cell_array_ptr, i, mxline_data);
     }
     plhs[0] = cell_array_ptr;
-    val = NULL;
-    endptr = NULL;    
-    mxline_data = NULL;
     free(line);
     free(line_data);
     mexPrintf("total time: %g sec for %d records\n", taketime() - start_time, num_of_records);
