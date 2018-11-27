@@ -13,21 +13,26 @@ static double taketime()
 void mexFunction(int nlhs, mxArray *plhs[],
         int nrhs, const mxArray *prhs[])
 {
+    if (nlhs != 0 || nrhs != 2 || !mxIsDouble(prhs[0]) || mxGetN(prhs[0])!=11 ||!mxIsChar(prhs[1]))
+    {        
+        mexPrintf("Function: write lasfile,required data format: xyzirncuRGB\n");
+        mexPrintf("Usage: matlab_writelas (data , filename );\n");
+        mexErrMsgIdAndTxt("MATLAB:cppfeature:invalidNumInputs", "ERROR: Invalid input or output arguments\n");
+        return;
+    }
     (void)nlhs; /* unused parameters */
     (void)plhs;
-    double *pointer;    
+    double *pointer;
+    char *filename;
     double start_time = 0.0,sum_x=0.0,sum_y=0.0,sum_z=0.0;
     int num_pts,index;
     LASwriteOpener laswriteopener;
     
     pointer = mxGetPr(prhs[0]);
     num_pts=mxGetM(prhs[0]);
-    if (mxGetN(prhs[0])!=11)
-    {
-        mexErrMsgIdAndTxt("MATLAB:cppfeature:invalidNumInputs",
-                "Invalid input, required format: xyzirncuRGB!");
-    }    
-    laswriteopener.set_file_name(mxArrayToString(prhs[1]));
+    
+    filename = mxArrayToString(prhs[1]);
+    laswriteopener.set_file_name(filename);
     start_time = taketime();
     if (!laswriteopener.active())
     {
