@@ -39,7 +39,7 @@ static char *readline(FILE *input)
     return line;
 }
 
-void readCell(const char *filename, int nlhs, const mxArray *plhs[])
+static void readCell(const char *filename, int nlhs, const mxArray *plhs[])
 {
     FILE *fp = fopen(filename, "r");
     int num_of_records, i;
