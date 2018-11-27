@@ -42,10 +42,10 @@ static char *readline(FILE *input)
 void readCell(const char *filename, int nlhs, const mxArray *plhs[])
 {
     FILE *fp = fopen(filename, "r");
-    int num_of_records, i, j;
+    int num_of_records, i;
     char *endptr, *val;
     double *line_data, start_time, value;
-    mwSize max_num_line_elements, num_elements;
+    mwSize num_elements;
     mxArray *mxline_data, *cell_array_ptr;
 
     start_time = taketime();
@@ -61,12 +61,11 @@ void readCell(const char *filename, int nlhs, const mxArray *plhs[])
     while (readline(fp) != NULL)
     {
         num_of_records++;
-    }
-    max_num_line_elements = max_line_len / 2 + 1;
+    }    
     rewind(fp);
 
     cell_array_ptr = mxCreateCellMatrix(num_of_records, 1);
-    line_data = (double *)malloc(max_num_line_elements * sizeof(double));
+    line_data = (double *)malloc( max_line_len / 2 * sizeof(double));
 
     for (i = 0; i < num_of_records; i++)
     {
