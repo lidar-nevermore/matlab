@@ -110,7 +110,7 @@ static void readCell(const char *filename, int nlhs, const mxArray *plhs[])
 void mexFunction(int nlhs, mxArray *plhs[],
                  int nrhs, const mxArray *prhs[])
 {
-    if (nlhs > 1 || nrhs > 1 || !mxIsChar(prhs[0]))
+    if (nlhs != 1 || nrhs != 1 || !mxIsChar(prhs[0]))
     {
         exit_with_help();
         fake_answer(nlhs, plhs);
