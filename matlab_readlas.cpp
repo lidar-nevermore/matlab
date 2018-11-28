@@ -13,7 +13,7 @@ static double taketime()
 void mexFunction(int nlhs, mxArray *plhs[],
         int nrhs, const mxArray *prhs[])
 {
-    if (nlhs != 1 || nrhs != 1 || !mxIsChar(prhs[0]))
+    if (nlhs > 1 || nrhs != 1 || !mxIsChar(prhs[0]))
     {
         mexPrintf("Function: read lasfile,format: xyzirncuRGB\n");
         mexPrintf("Usage: data = matlab_readlas ( filename );\n");
