@@ -57,8 +57,8 @@ template <typename T, class function>
 
 flannMatrixPtr mxArray2flannMatrix(const mxArray* mxdata)
 {
-    int num_of_records=mxGetM(mxdata);
-    int num_elements=mxGetN(mxdata);
+    size_t num_of_records=mxGetM(mxdata);
+    size_t num_elements=mxGetN(mxdata);
     double* mxdata_=mxGetPr(mxdata);
     //flann::Matrix<double> dataset(new double[num_of_records*num_elements], num_of_records, num_elements);
     flannMatrixPtr dataset=std::make_shared<flann::Matrix<double>> (new double[num_of_records*num_elements], num_of_records, num_elements);
@@ -78,6 +78,8 @@ void mexFunction( int nlhs, mxArray *plhs[],
         fake_answer(nlhs, plhs);
         return;
     }
+    float radius=float(mxGetScalar(prhs[nrhs-1]));
+    mexPrintf("radius:%f\n",radius);
     double start_time = taketime();
     flannMatrixPtr dataset,query;
     if (nlhs==2)
@@ -94,9 +96,9 @@ void mexFunction( int nlhs, mxArray *plhs[],
     std::vector<std::vector<int>>indices;
     std::vector<std::vector<double>>dists;
     
-    flann::Index< L2<double> > flann_index(*dataset, flann::KDTreeSingleIndexParams(16));
+    flann::Index< flann::L2<double> > flann_index(*dataset, flann::KDTreeSingleIndexParams(16));
     flann_index.buildIndex();
-    flann_index.radiusSearch(*query, indices, dists, mxGetScalar(prhs[nrhs-1]), flann::SearchParams(128));
+    flann_index.radiusSearch(*query, indices, dists, radius*radius, flann::SearchParams(128));
     
     if (nlhs==2)
     {
