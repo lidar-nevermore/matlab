@@ -1,10 +1,11 @@
 #include <cstdlib>
 #include <ctime>
-#include "mex.h"
 #include <flann/flann.h>
 #include <vector>
 #include <memory>
 #include <functional>
+#include "mex.h"
+
 using namespace std;
 
 typedef shared_ptr<flann::Matrix<double>> flannMatrixPtr;
@@ -111,6 +112,15 @@ void mexFunction( int nlhs, mxArray *plhs[],
     {
         plhs[0]=vec2mxCell(indices,[](double a){return a+1;});
         indices.clear();
+    }
+    if (nlhs==2)
+    {
+        delete []dataset->ptr();
+        delete []query->ptr();
+    }
+    else
+    {
+        delete []dataset->ptr();
     }
     mexPrintf("total time: %f sec\n", taketime() - start_time);
     return;
