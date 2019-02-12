@@ -1,3 +1,4 @@
+//mex radiusSearch.cpp -I/usr/include /usr/lib/x86_64-linux-gnu/liblz4.so
 #include <cstdlib>
 #include <ctime>
 #include "mex.h"
@@ -82,8 +83,8 @@ void mexFunction( int nlhs, mxArray *plhs[],
     float sqr_radius_f=(float)sqr_radius_d;
     if (sqr_radius_d!=sqr_radius_f)
     {
-        mexPrintf("Warning:floating-point numbers cannot precisely represent input radius.\n");
-        mexPrintf("Input square_radius: %f; Used square_radius: %f.\n",sqr_radius_d,sqr_radius_f);
+        mexPrintf("Warning:computation may suffer from floating-point numbers accuracy problem.\n");
+        mexPrintf("Input square_radius: %lf; Actually used square_radius: %f.\n",sqr_radius_d,sqr_radius_f);
     }
     double start_time = taketime();
     flannMatrixPtr dataset,query;
