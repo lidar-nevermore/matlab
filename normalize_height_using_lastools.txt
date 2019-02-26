@@ -1,0 +1,15 @@
+data = matlab_readlas ( 'points2007.las' );
+.\lastile -i points2007.las -reversible -tile_size 100 -buffer 5 -o temp\tile.laz -olaz
+.\lasheight -i temp\*.laz -replace_z -odix _height -olas -cores 2
+.\lasmerge -i temp\*.las -o points2007_height.las
+.\las2txt -i points2007_height.las -o extra.txt -parse ME
+
+data2 = matlab_readlas ( 'points2007_height.las' );
+extra=importdata('extra.txt');
+[~,idx]=unique(extra(:,2));
+
+###validate###
+xy=data2(idx(2:end),1:2);
+isequal(round(xy,2),round(data(:,1:2),2))
+
+norz=data2(idx(2:end),3);
