@@ -18,7 +18,8 @@ static void fake_answer(int nlhs, mxArray *plhs[])
     int i;
     for(i=0;i<nlhs;i++)
         plhs[i] = mxCreateDoubleMatrix(0, 0, mxREAL);
-    string errormsg="Usage: [idx,dist]=radiusSearch(X,Y,radius);\n";
+    string errormsg="Function:find all the X points that are within distance radius of the Y points;\n";
+    errormsg      +="Usage: [idx,dist]=radiusSearch(X,Y,radius);\n";
     errormsg      +="       [idx,dist]=radiusSearch(X,radius);\n";
     errormsg      +="       idx=radiusSearch(X,Y,radius);\n";
     errormsg      +="       idx=radiusSearch(X,radius);";
@@ -83,12 +84,12 @@ void mexFunction( int nlhs, mxArray *plhs[],
     float sqr_radius_f=(float)sqr_radius_d;
     if (sqr_radius_d!=sqr_radius_f)
     {
-        mexPrintf("Warning:computation may suffer from floating-point numbers accuracy problem.\n");
-        mexPrintf("Input square_radius: %lf; Actually used square_radius: %f.\n",sqr_radius_d,sqr_radius_f);
+        mexPrintf("Warning:floating-point numbers cannot precisely represent input radius.\n");
+        mexPrintf("Input square_radius: %f; Used square_radius: %f.\n",sqr_radius_d,sqr_radius_f);
     }
     double start_time = taketime();
     flannMatrixPtr dataset,query;
-    if (nlhs==2)
+    if (nrhs==3)
     {
         dataset=mxArray2flannMatrix(prhs[0]);
         query=mxArray2flannMatrix(prhs[1]);
@@ -108,7 +109,7 @@ void mexFunction( int nlhs, mxArray *plhs[],
     
     if (nlhs==2)
     {
-        plhs[0]=vec2mxCell(indices,[](double a){return a+1;});
+        plhs[0]=vec2mxCell(indices,[](double a){return a+1;});//matlab index starts from 1
         indices.clear();
         plhs[1]=vec2mxCell(dists,[](double a){return sqrt(a);});
         dists.clear();
@@ -118,7 +119,7 @@ void mexFunction( int nlhs, mxArray *plhs[],
         plhs[0]=vec2mxCell(indices,[](double a){return a+1;});
         indices.clear();
     }
-    if (nlhs==2)
+    if (nrhs==2)
     {
         delete []dataset->ptr();
         delete []query->ptr();
