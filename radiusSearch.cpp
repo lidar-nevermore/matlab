@@ -119,7 +119,7 @@ void mexFunction( int nlhs, mxArray *plhs[],
         plhs[0]=vec2mxCell(indices,[](double a){return a+1;});
         indices.clear();
     }
-    if (nrhs==2)
+    if (nrhs==3)
     {
         delete []dataset->ptr();
         delete []query->ptr();
