@@ -1,13 +1,12 @@
 function [ nor_ ] = computeNormal( data,idx )
 
-pts=data(:,1:3);
 nor_=zeros(length(idx),4);
 for i=1:length(idx)
     if length(idx{i})<3
         nor_(i,:)=[0,0,0,1];
         continue;
     end
-    points=pts(idx{i},:);
+    points=data(idx{i},1:3);
     [v,d]=eig(cov(points));
     if dot(points(1,:),v(1:3))>0
         nor_(i,1:3)=v(1:3)*-1;
