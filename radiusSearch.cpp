@@ -1,4 +1,5 @@
 //mex radiusSearch.cpp -I/usr/include /usr/lib/x86_64-linux-gnu/liblz4.so
+//mex radiusSearch.cpp -IC:\PCL_1_8_1\3rdParty\FLANN\include -IC:\PCL_1_8_1\3rdParty\LZ4\include C:\PCL_1_8_1\3rdParty\LZ4\lib\lz4.lib C:\PCL_1_8_1\3rdParty\FLANN\lib\flann_cpp_s.lib
 #include <cstdlib>
 #include <ctime>
 #include "mex.h"
@@ -32,11 +33,10 @@ template <typename T>
     int num_elements=vecdata[0].size();
     mxArray* mxdata=mxCreateDoubleMatrix(num_of_records, num_elements, mxREAL);
     for (int i = 0; i < num_of_records; i++)
-    {
-        mxdata[i]=vecdata[i][0];
-        mxdata[i+num_of_records]=vecdata[i][1];
-        mxdata[i+2*num_of_records]=vecdata[i][2];
-    }
+        for (int j = 0; j < num_elements; j++)
+        {
+            mxdata[i+num_of_records*j]=vecdata[i][j];
+        }
     return mxdata;
 }
 
@@ -65,11 +65,10 @@ flannMatrixPtr mxArray2flannMatrix(const mxArray* mxdata)
     //flann::Matrix<double> dataset(new double[num_of_records*num_elements], num_of_records, num_elements);
     flannMatrixPtr dataset=std::make_shared<flann::Matrix<double>> (new double[num_of_records*num_elements], num_of_records, num_elements);
     for (int i = 0; i < num_of_records; i++)
-    {
-        (*dataset)[i][0]= mxdata_[i];
-        (*dataset)[i][1]= mxdata_[i+num_of_records];
-        (*dataset)[i][2]= mxdata_[i+2*num_of_records];
-    }
+        for (int j = 0; j < num_elements; j++)
+        {
+            (*dataset)[i][j]= mxdata_[i+j*num_of_records];
+        }
     return dataset;
 }
 void mexFunction( int nlhs, mxArray *plhs[],
@@ -84,7 +83,7 @@ void mexFunction( int nlhs, mxArray *plhs[],
     float sqr_radius_f=(float)sqr_radius_d;
     if (sqr_radius_d!=sqr_radius_f)
     {
-        mexPrintf("Warning:floating-point numbers cannot precisely represent input radius.\n");
+        mexPrintf("Warning:precise of input floating-point radius...\n");
         mexPrintf("Input square_radius: %f; Used square_radius: %f.\n",sqr_radius_d,sqr_radius_f);
     }
     double start_time = taketime();
@@ -103,7 +102,7 @@ void mexFunction( int nlhs, mxArray *plhs[],
     std::vector<std::vector<int>>indices;
     std::vector<std::vector<double>>dists;
     
-    flann::Index< flann::L2<double> > flann_index(*dataset, flann::KDTreeSingleIndexParams(15));
+    flann::Index< flann::L2_Simple<double> > flann_index(*dataset, flann::KDTreeSingleIndexParams(15));
     flann_index.buildIndex();
     flann_index.radiusSearch(*query, indices, dists, sqr_radius_f, flann::SearchParams(64));
     
