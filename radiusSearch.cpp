@@ -104,7 +104,10 @@ void mexFunction( int nlhs, mxArray *plhs[],
     
     flann::Index< flann::L2_Simple<double> > flann_index(*dataset, flann::KDTreeSingleIndexParams(15));
     flann_index.buildIndex();
-    flann_index.radiusSearch(*query, indices, dists, sqr_radius_f, flann::SearchParams(64));
+    auto searchPara = flann::SearchParams(64);
+    //how many cores to assign to the search(used only if compiled with OpenMP capable compiler) (0 for auto)
+    searchPara.cores = 0;
+    flann_index.radiusSearch(*query, indices, dists, sqr_radius_f, searchPara);
     
     if (nlhs==2)
     {
